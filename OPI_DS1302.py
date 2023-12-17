@@ -20,6 +20,48 @@ class DS1302:
 
         self._initialize_rtc()
 
+    def _encode_datetime(self, dt):
+        year = dt.year - 2000
+        month = dt.month
+        day = dt.day
+        hour = dt.hour
+        minute = dt.minute
+        second = dt.second
+
+        # DS1302 encoding format
+        encoded_bytes = [
+            self._encode_bcd(year),
+            self._encode_bcd(month),
+            self._encode_bcd(day),
+            self._encode_bcd(hour),
+            self._encode_bcd(minute),
+            self._encode_bcd(second),
+            0x00,  # Placeholder for other relevant data
+        ]
+
+        return bytes(encoded_bytes)
+
+    def _encode_bcd(self, value):
+        tens = value // 10
+        ones = value % 10
+        return (tens << 4) | ones
+    
+    def _decode_datetime(self, byte_list):
+        # Assuming DS1302 encoding format
+        year = self._decode_bcd(byte_list[0]) + 2000
+        month = self._decode_bcd(byte_list[1])  # No bitmask
+        day = self._decode_bcd(byte_list[2])
+        hour = self._decode_bcd(byte_list[3])
+        minute = self._decode_bcd(byte_list[4])
+        second = self._decode_bcd(byte_list[5])
+
+        return datetime.datetime(year, month, day, hour, minute, second)
+
+    def _decode_bcd(self, value):
+        tens = (value >> 4) & 0x0F
+        ones = value & 0x0F
+        return tens * 10 + ones
+
     def _initialize_rtc(self):
         self._start_tx()
         self._write_byte(0x8e, 0x00)
@@ -101,45 +143,3 @@ class DS1302:
     @staticmethod
     def close():
         GPIO.cleanup()
-
-    def _encode_datetime(self, dt):
-        year = dt.year - 2000
-        month = dt.month
-        day = dt.day
-        hour = dt.hour
-        minute = dt.minute
-        second = dt.second
-
-        # DS1302 encoding format
-        encoded_bytes = [
-            self._encode_bcd(year),
-            self._encode_bcd(month),
-            self._encode_bcd(day),
-            self._encode_bcd(hour),
-            self._encode_bcd(minute),
-            self._encode_bcd(second),
-            0x00,  # Placeholder for other relevant data
-        ]
-
-        return bytes(encoded_bytes)
-
-    def _encode_bcd(self, value):
-        tens = value // 10
-        ones = value % 10
-        return (tens << 4) | ones
-    
-    def _decode_datetime(self, byte_list):
-        # Assuming DS1302 encoding format
-        year = self._decode_bcd(byte_list[0]) + 2000
-        month = self._decode_bcd(byte_list[1])  # No bitmask
-        day = self._decode_bcd(byte_list[2])
-        hour = self._decode_bcd(byte_list[3])
-        minute = self._decode_bcd(byte_list[4])
-        second = self._decode_bcd(byte_list[5])
-
-        return datetime.datetime(year, month, day, hour, minute, second)
-
-    def _decode_bcd(self, value):
-        tens = (value >> 4) & 0x0F
-        ones = value & 0x0F
-        return tens * 10 + ones
