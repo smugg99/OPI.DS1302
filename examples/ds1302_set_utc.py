@@ -5,9 +5,9 @@
 
 import datetime
 import sys
-import OPI_DS1302 as pyRPiRTC
+from OPI_DS1302 import DS1302
 
-rtc = pyRPiRTC.DS1302(clk_pin=7, data_pin=5, ce_pin=8)
+rtc = DS1302(clk_pin=7, data_pin=5, ce_pin=8)
 
 try:
     # write date and time from system to RTC chip (in UTC)
