@@ -107,5 +107,22 @@ class DS1302:
         pass
 
     def _encode_datetime(self, dt):
-        # Implement datetime encoding logic here
-        pass
+        year = dt.year - 2000
+        month = dt.month
+        day = dt.day
+        hour = dt.hour
+        minute = dt.minute
+        second = dt.second
+
+        # Example encoding logic; adjust as needed
+        encoded_bytes = [
+            ((year // 10) << 4) | (year % 10),
+            ((month // 10) << 4) | (month % 10),
+            ((day // 10) << 4) | (day % 10),
+            ((hour // 10) << 4) | (hour % 10),
+            ((minute // 10) << 4) | (minute % 10),
+            ((second // 10) << 4) | (second % 10),
+            0x00,  # Placeholder for other relevant data
+        ]
+
+        return bytes(encoded_bytes)
