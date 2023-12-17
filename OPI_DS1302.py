@@ -150,6 +150,7 @@ class DS1302:
         year = ((byte_l[6] & 0xf0) >> 4) * 10 + (byte_l[6] & 0x0f) + 2000
         # return datetime value
         
+        print(byte_l)
         print(second, minute, hour, day, month, year)
         
         return datetime.datetime(year, month, day, hour, minute, second)
