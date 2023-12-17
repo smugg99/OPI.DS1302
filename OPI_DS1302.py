@@ -127,3 +127,19 @@ class DS1302:
         tens = value // 10
         ones = value % 10
         return (tens << 4) | ones
+    
+    def _decode_datetime(self, byte_list):
+        # Assuming DS1302 encoding format
+        year = self._decode_bcd(byte_list[0]) + 2000
+        month = self._decode_bcd(byte_list[1])
+        day = self._decode_bcd(byte_list[2])
+        hour = self._decode_bcd(byte_list[3])
+        minute = self._decode_bcd(byte_list[4])
+        second = self._decode_bcd(byte_list[5])
+
+        return datetime.datetime(year, month, day, hour, minute, second)
+
+    def _decode_bcd(self, value):
+        tens = (value >> 4) & 0x0F
+        ones = value & 0x0F
+        return tens * 10 + ones
