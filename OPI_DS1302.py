@@ -80,7 +80,7 @@ class DS1302:
         self._write_byte(command, 0x00)
 
         for i in range(min(len(data), 31)):
-            self._write_byte(command, data[i])  # Use data[i] instead of command
+            self._write_byte(data[i], 0x00)  # Use data[i] instead of command
         self._end_tx()
 
     def read_ram(self):
