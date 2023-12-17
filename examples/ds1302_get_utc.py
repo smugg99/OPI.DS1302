@@ -6,7 +6,7 @@
 import sys
 import OPI_DS1302 as pyRPiRTC
 
-rtc = pyRPiRTC.DS1302(clk_pin=11, data_pin=13, ce_pin=15)
+rtc = pyRPiRTC.DS1302(clk_pin=7, data_pin=5, ce_pin=8)
 
 try:
     # read date and time from RTC chip
