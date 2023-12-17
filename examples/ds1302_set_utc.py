@@ -5,7 +5,7 @@
 
 import datetime
 import sys
-import pyRPiRTC
+import OPI_DS1302.DS1302 as pyRPiRTC
 
 rtc = pyRPiRTC.DS1302(clk_pin=11, data_pin=13, ce_pin=15)
 

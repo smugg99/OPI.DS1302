@@ -2,7 +2,7 @@
 
 import binascii
 import datetime
-import pyRPiRTC
+import OPI_DS1302 as pyRPiRTC
 
 rtc = pyRPiRTC.DS1302()
 

@@ -1,16 +1,12 @@
 from setuptools import setup
 
 setup(
-    name='pyRPiRTC',
-    version='0.0.3',
+    name='OPI.DS1302',
+    version='0.0.4',
     license='MIT',
-    url='https://github.com/sourceperl/rpi.rtc',
+    url='https://github.com/smugg99/OPI.DS1302',
     platforms='any',
     py_modules=[
-        'pyRPiRTC'
-    ],
-    scripts=[
-        'scripts/ds1302_get_utc',
-        'scripts/ds1302_set_utc'
+        'OPI_DS1302'
     ]
 )
