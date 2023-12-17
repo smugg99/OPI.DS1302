@@ -7,12 +7,10 @@ class DS1302:
     CLK_DELAY = 5E-6
 
     def __init__(self, clk_pin, data_pin, ce_pin):
-        
         GPIO.setwarnings(False)
-        
         GPIO.setboard(GPIO.H616)
         GPIO.setmode(GPIO.BOARD)
-        
+
         self._clk_pin = clk_pin
         self._data_pin = data_pin
         self._ce_pin = ce_pin
@@ -43,47 +41,47 @@ class DS1302:
     def _read_byte(self):
         GPIO.setup(self._data_pin, GPIO.IN)
         byte = 0
-        
+
         for i in range(8):
             GPIO.output(self._clk_pin, GPIO.HIGH)
             time.sleep(self.CLK_DELAY)
-            
+
             GPIO.output(self._clk_pin, GPIO.LOW)
             time.sleep(self.CLK_DELAY)
-            
+
             bit = GPIO.input(self._data_pin)
             byte |= (bit << i)
         return byte
 
-    def _write_byte(self, byte):
+    def _write_byte(self, command, byte):
         GPIO.setup(self._data_pin, GPIO.OUT)
-        
+
         for _ in range(8):
             GPIO.output(self._clk_pin, GPIO.LOW)
             time.sleep(self.CLK_DELAY)
-            
+
             GPIO.output(self._data_pin, byte & 0x01)
             byte >>= 1
-            
+
             GPIO.output(self._clk_pin, GPIO.HIGH)
             time.sleep(self.CLK_DELAY)
 
     def _read_burst(self, command):
         self._start_tx()
-        self._write_byte(command)
-        
+        self._write_byte(command, 0x00)
+
         byte_list = [self._read_byte() for _ in range(31)]
         self._end_tx()
-        
+
         return bytearray(byte_list)
 
     def _write_burst(self, command, data):
         self._start_tx()
-        self._write_byte(command)
-        
+        self._write_byte(command, 0x00)
+
         for i in range(min(len(data), 31)):
-            self._write_byte(ord(data[i:i + 1]))
-            
+            self._write_byte(command, ord(data[i:i + 1]))
+
         self._end_tx()
 
     def read_ram(self):
@@ -94,7 +92,7 @@ class DS1302:
 
     def read_datetime(self):
         byte_list = self._read_burst(0xbf)
-        
+
         return self._decode_datetime(byte_list)
 
     def write_datetime(self, dt):
