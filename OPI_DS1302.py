@@ -47,9 +47,12 @@ class DS1302:
         return (tens << 4) | ones
     
     def _decode_datetime(self, byte_list):
+        # Print the raw bytes for inspection
+        print("Raw Bytes:", byte_list)
+
         # Assuming DS1302 encoding format
         year = self._decode_bcd(byte_list[0]) + 2000
-        month = self._decode_bcd(byte_list[1])  # No bitmask
+        month = self._decode_bcd(byte_list[1])
         day = self._decode_bcd(byte_list[2])
         hour = self._decode_bcd(byte_list[3])
         minute = self._decode_bcd(byte_list[4])
