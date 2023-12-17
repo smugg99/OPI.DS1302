@@ -7,7 +7,10 @@ class DS1302:
     CLK_DELAY = 5E-6
 
     def __init__(self, clk_pin=11, data_pin=13, ce_pin=15):
+        
         GPIO.setwarnings(False)
+        
+        GPIO.setboard(GPIO.H616)
         GPIO.setmode(GPIO.BOARD)
         
         self._clk_pin = clk_pin
