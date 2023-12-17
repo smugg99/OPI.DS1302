@@ -12,6 +12,7 @@ class DS1302:
         # no warnings
         GPIO.setwarnings(False)
         # use safer pin number (avoid GPIO renumber on each Pi release)
+        GPIO.setboard(GPIO.H616)
         GPIO.setmode(GPIO.BOARD)
         # set GPIO pins
         self._clk_pin = clk_pin
