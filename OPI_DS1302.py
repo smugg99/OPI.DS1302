@@ -131,7 +131,7 @@ class DS1302:
     def _decode_datetime(self, byte_list):
         # Assuming DS1302 encoding format
         year = self._decode_bcd(byte_list[0]) + 2000
-        month = self._decode_bcd(byte_list[1] & 0x1F)  # Mask upper bits
+        month = self._decode_bcd(byte_list[1])  # No bitmask
         day = self._decode_bcd(byte_list[2])
         hour = self._decode_bcd(byte_list[3])
         minute = self._decode_bcd(byte_list[4])
