@@ -102,10 +102,6 @@ class DS1302:
     def close():
         GPIO.cleanup()
 
-    def _decode_datetime(self, byte_list):
-        # Implement datetime decoding logic here
-        pass
-
     def _encode_datetime(self, dt):
         year = dt.year - 2000
         month = dt.month
@@ -114,15 +110,20 @@ class DS1302:
         minute = dt.minute
         second = dt.second
 
-        # Example encoding logic; adjust as needed
+        # DS1302 encoding format
         encoded_bytes = [
-            ((year // 10) << 4) | (year % 10),
-            ((month // 10) << 4) | (month % 10),
-            ((day // 10) << 4) | (day % 10),
-            ((hour // 10) << 4) | (hour % 10),
-            ((minute // 10) << 4) | (minute % 10),
-            ((second // 10) << 4) | (second % 10),
+            self._encode_bcd(year),
+            self._encode_bcd(month),
+            self._encode_bcd(day),
+            self._encode_bcd(hour),
+            self._encode_bcd(minute),
+            self._encode_bcd(second),
             0x00,  # Placeholder for other relevant data
         ]
 
         return bytes(encoded_bytes)
+
+    def _encode_bcd(self, value):
+        tens = value // 10
+        ones = value % 10
+        return (tens << 4) | ones
